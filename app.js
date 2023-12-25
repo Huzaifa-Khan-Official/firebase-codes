@@ -324,3 +324,10 @@ const updDocFromSubCollec = async (id) => {
     // ....
   });
 };
+
+
+// to hide modal
+// $('#modalId').modal('hide');
+
+// to hide canvas
+// $('#canvasId').offcanvas('hide');

@@ -264,6 +264,22 @@ if (picInput) {
   });
 }
 
+// adding Parent collection
+const addParentcollection = async () => {
+  // collection name
+  await addDoc(collection(db, `restaurants`), {
+    // ......
+  });
+};
+
+// seting parent Collection
+const setParentCollec = async () => {
+  // collection name,   unique id of user
+  await setDoc(doc(db, "users", user.uid), {
+    // ...
+  });
+};
+
 // get data of parent collection
 const getDataOfParentCollection = async () => {
   // collection name => document Id
@@ -281,7 +297,7 @@ const delDocFromParentCollec = async (id) => {
   await deleteDoc(doc(db, `restaurants/`, id));
 };
 
-// updating a document
+// updating document of parent collection
 const updateDocument = async () => {
   // referance of the document which has to be updated
   // collection name => document Id
@@ -297,6 +313,14 @@ const addSubcollection = async () => {
   // parent Collection => document Id => sub collection name
   await addDoc(collection(db, `restaurants/${adminUid}/menue`), {
     // ......
+  });
+};
+
+// seting Sub Collection
+const setSubCollec = async () => {
+  // parent Collection => document Id => sub collection name => sub doc Id
+  await setDoc(doc(db, `users/${documentId}/subCollectionName/`, yourId), {
+    // ...
   });
 };
 
@@ -330,7 +354,6 @@ const updDocFromSubCollec = async (id) => {
     // ....
   });
 };
-
 
 // to hide modal
 // $('#modalId').modal('hide');

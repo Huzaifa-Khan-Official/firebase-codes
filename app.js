@@ -17,6 +17,12 @@ import {
   setDoc,
   getDoc,
   updateDoc,
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  deleteDoc,
+  orderBy,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // storage imports
@@ -267,4 +273,38 @@ const getDataOfParentCollection = async () => {
   if (docSnap.data()) {
     // ......
   }
+};
+
+// updating a document
+const updateDocument = async () => {
+  // referance of the document which has to be updated
+  // collection name => document Id
+  const updateDocumentRef = doc(db, "restaurants", adminUid);
+
+  await updateDoc(updateDocumentRef, {
+    // ......
+  });
+};
+
+// adding sub collection
+const addSubcollection = async () => {
+  // parent Collection => document Id => sub collection name
+  await addDoc(collection(db, `restaurants/${adminUid}/menue`), {
+    // ......
+  });
+};
+
+// getting data from sub collection
+const getDataFromSubCollection = () => {
+  // parent collection name => document Id => sub collection name
+  const q = query(collection(db, `restaurants/${adminUid}/menue`));
+
+  // by using orderBy query
+  // const q = query(collection(db, `restaurants/${adminUid}/menue`), orderBy("time"));
+
+  onSnapshot(q, (data) => {
+    data.docChanges().forEach((singleData) => {
+      // .....
+    });
+  });
 };

@@ -275,6 +275,12 @@ const getDataOfParentCollection = async () => {
   }
 };
 
+// deleting document from parent collection
+const delDocFromParentCollec = async (id) => {
+  // parent collection => document Id
+  await deleteDoc(doc(db, `restaurants/`, id));
+};
+
 // updating a document
 const updateDocument = async () => {
   // referance of the document which has to be updated

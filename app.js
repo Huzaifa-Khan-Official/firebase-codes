@@ -308,3 +308,19 @@ const getDataFromSubCollection = () => {
     });
   });
 };
+
+// deleting document from sub collection
+const delDocFromSubCollec = async (id) => {
+  // parent collection => document Id => sub collection => sub document id
+  await deleteDoc(doc(db, `restaurants/${adminUid}/menue`, id));
+};
+
+// updating document of sub collection
+const updDocFromSubCollec = async (id) => {
+  // parent collection => document Id => sub collection => sub document id
+  const docRef = doc(db, `restaurants/${adminUid}/menue`, id);
+
+  await updateDoc(docRef, {
+    // ....
+  });
+};

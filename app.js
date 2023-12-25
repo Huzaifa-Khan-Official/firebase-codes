@@ -16,7 +16,16 @@ import {
   doc,
   setDoc,
   getDoc,
+  updateDoc,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// storage imports
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 // firebase authentication
 const auth = getAuth();
@@ -26,6 +35,9 @@ const provider = new GoogleAuthProvider();
 
 // firestore
 const db = getFirestore(app);
+
+// Initialize Cloud Storage and get a reference to the service
+const storage = getStorage();
 
 // getting login email, password inputs, button and an error paragraph
 let lemail = document.querySelector("#lemail"); // get email to login user
@@ -84,7 +96,6 @@ let sbtn = document.querySelector("#sbtn"); // get signin btn
 let semail = document.querySelector("#semail"); // get email to signin user
 let spassword = document.querySelector("#spassword"); // get password to signin user
 let sname = document.querySelector("#sname"); // get name of a user
-
 
 // signup button
 if (sbtn) {
@@ -190,3 +201,70 @@ if (googleSignInBtn) {
       });
   });
 }
+
+// image url function
+const downloadImageUrl = (file) => {
+  return new Promise((resolve, reject) => {
+    const restaurantImageRef = ref(
+      storage,
+      // storage location
+      `restaurantImages/${adminUid}/${file.name}`
+    );
+    const uploadTask = uploadBytesResumable(restaurantImageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        switch (snapshot.state) {
+          case "paused":
+            break;
+          case "running":
+            spinnerBorder.style.display = "block";
+            break;
+        }
+      },
+      (error) => {
+        reject(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref)
+          .then((downloadURL) => {
+            resolve(downloadURL);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      }
+    );
+  });
+};
+
+const picInput = document.querySelector("#picInput");
+
+// input file fuction
+if (picInput) {
+  picInput.addEventListener("change", async () => {
+    if (picInput.files.length > 0) {
+      // image file
+      const file = picInput.files[0];
+      imgUrl = await downloadImageUrl(file);
+      spinnerBorder.style.display = "none";
+      if (imgUrl) {
+        picOutput.src = imgUrl;
+      }
+    }
+  });
+}
+
+// get data of parent collection
+const getDataOfParentCollection = async () => {
+  // collection name => document Id
+  const docRef = doc(db, "restaurants", localStorage.getItem("adminUid"));
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.data()) {
+    // ......
+  }
+};

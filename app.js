@@ -360,3 +360,7 @@ const updDocFromSubCollec = async (id) => {
 
 // to hide canvas
 // $('#canvasId').offcanvas('hide');
+// best of luck
+
+
+
